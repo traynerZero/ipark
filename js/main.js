@@ -1,12 +1,15 @@
 
 
   var coor = [];
+  var marker;
+  var markerIcon;
+ var array = [];
+
+
+  var map, infoWindow;
 
   // The map, centered at Uluru
       function initMap() {
-
- var array = [];
-  var map, infoWindow;
 
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
@@ -80,7 +83,7 @@
         for(var x = 0; x < array.length-1; x++){
           coor = array[x].split(',');
 
-          var markerIcon = {
+          markerIcon = {
             url: 'http://image.flaticon.com/icons/svg/252/252025.svg',
             scaledSize: new google.maps.Size(80, 80),
             origin: new google.maps.Point(0, 0),
@@ -89,7 +92,7 @@
           };
 
         var markerLabel = ""+coor[3]; 
-        var marker = new google.maps.Marker({
+        marker = new google.maps.Marker({
           map: map,
           icon: markerIcon,
           draggable: false,
@@ -108,6 +111,7 @@
           $('#dataDisplay').hide("fade");
       });
 
+        
         marker.addListener('click', function(){
             toggleData(this);
         });
@@ -147,6 +151,96 @@
 
 
     }
+
+    $(document).ready(function(){
+      var array = [];
+      var id;
+
+
+      setInterval(function(){
+      $.ajax({
+     type: "post",
+     url: "connect.php",
+     success: function(result){
+
+        array = result.split("/");
+
+        for(var x = 0; x < array.length-1; x++){
+          coor = array[x].split(',');
+        marker = new google.maps.Marker({
+          map: map,
+          icon: markerIcon,
+          draggable: false,
+          title: coor[2],
+          label:{
+              text: ""+coor[3],
+              color: "#eb3a44",
+              fontSize: "16px",
+              fontWeight: "bold"
+            },
+          position: {lat: parseFloat(coor[0]), lng: parseFloat(coor[1])}
+        });
+
+        marker.addListener('click', function(){
+            toggleData(this);
+        });
+
+      }
+
+
+
+
+
+       
+    }
+
+  });
+
+      $.ajax({
+     type: "post",
+     url: "getData-d.php",
+     data: {data:id},
+     success: function(result){
+      console.log(id);
+        $('#js').html("");
+        $('#js').html(result);
+      }
+    });
+
+
+      }, 1000);
+
+
+      function toggleData(data) {
+          id = data.getTitle();
+          $('#data').hide();
+
+    $.ajax({
+     type: "post",
+     url: "getData.php",
+     data: {data:id},
+     success: function(result){
+       $('#loader').show();
+      setTimeout(function(){
+       $('#data').show("fade");
+
+       //responsive data
+       $("#data").html(result);
+        //
+
+        $('#loader').hide();
+      
+      }, 1000);
+       
+    }
+
+  });
+
+          $('#dataDisplay').show("fade");
+      }
+
+
+    });
 
       
 

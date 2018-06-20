@@ -50,7 +50,7 @@ if($result){
           <div class="col-lg-12 col-12">
           <div class="small-box bg-danger">
           <div class="inner">
-                <h3>'.$remaining_slot.' &nbsp;&nbsp;&nbsp;&nbsp;<span class="fas fa-parking"></span> Slots Available</h3>
+               <h3><i id="remaining_slot">'.$remaining_slot.'</i> &nbsp;&nbsp;&nbsp;&nbsp;<span class="fas fa-parking"></span> Slots Available</h3>
           </div>
           </div>
           </div>
@@ -59,7 +59,7 @@ if($result){
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>'.$car_slot.' &nbsp;&nbsp;&nbsp;&nbsp;<span class="fa fa-car"></span> Car slots</h3>
+                <h3 ><i id="car_slot">'.$car_slot.'</i> &nbsp;&nbsp;&nbsp;&nbsp;<span class="fa fa-car"></span> Car slots</h3>
 
               </div>
               <div class="icon">
@@ -73,7 +73,7 @@ if($result){
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>'.$motor_slot.' &nbsp;&nbsp;&nbsp;&nbsp;<span class="fa fa-motorcycle"></span> Motor slots</h3>
+                <h3><i id="motor_slot">'.$motor_slot.'</i>&nbsp;&nbsp;&nbsp;&nbsp;<span class="fa fa-motorcycle"></span> Motor slots</h3>
               </div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
