@@ -1,15 +1,27 @@
 
 
   var coor = [];
-  var marker;
+  var marker,marker2;
+  var markers= []; //array of markers
   var markerIcon;
+  var timer;
  var array = [];
-
+ var areaobj = [];
 
   var map, infoWindow;
 
   // The map, centered at Uluru
       function initMap() {
+
+        $.ajax({
+     type: "post",
+     url: "get-menu.php",
+     success: function(result){
+
+       $('#area_menu').html(result);
+    }
+
+  });
 
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
@@ -61,27 +73,15 @@
      map.mapTypes.set('mystyle', new google.maps.StyledMapType(myStyle, { name: 'iPark' }));
 
         // Try HTML5 geolocation.
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
-
-            infoWindow.setPosition(pos);
-            infoWindow.setContent('Location found.');
-            infoWindow.open(map);
-            map.setCenter(pos);
-          }, function() {
-            handleLocationError(true, infoWindow, map.getCenter());
-          });
-        } else {
-          // Browser doesn't support Geolocation
-          handleLocationError(false, infoWindow, map.getCenter());
-        }
 
         for(var x = 0; x < array.length-1; x++){
           coor = array[x].split(',');
+          areaobj[x] = JSON.parse(JSON.stringify({
+                  lat:coor[0],
+                  lng:coor[1],
+                  id:coor[2],
+                  slot:coor[3],
+              }));
 
           markerIcon = {
             url: 'http://image.flaticon.com/icons/svg/252/252025.svg',
@@ -107,8 +107,29 @@
           position: {lat: parseFloat(coor[0]), lng: parseFloat(coor[1])}
         });
 
+        markers.push(marker);
+
         google.maps.event.addListener(map, 'click', function(event) {
           $('#dataDisplay').hide("fade");
+          clearInterval(timer);
+      });
+
+
+
+        google.maps.event.addListener(map, 'zoom_changed', function(event) {
+          var bound = new google.maps.LatLngBounds();
+          if(map.getZoom() == 16){
+
+           
+
+
+
+      //   marker2.addListener('click', function(){
+      //       toggleData(this);
+      //   });
+
+      //       console.log( bound.getCenter().lat() );
+            }
       });
 
         
@@ -117,9 +138,13 @@
         });
 
         }
-
         function toggleData(data) {
+
           var id = data.getTitle();
+          var lat = data.getPosition().lat();
+          var lng = data.getPosition().lng();
+          init_panorama(lat,lng);
+
           $('#data').hide();
     $.ajax({
      type: "post",
@@ -140,6 +165,20 @@
           $('#dataDisplay').show("fade");
       }
 
+       function init_panorama(lat_d,lng_d) {
+
+  var loc = {lat: lat_d, lng: lng_d};
+  var panorama = new google.maps.StreetViewPanorama(
+      document.getElementById('pano'), {
+        position: loc,
+        pov: {
+          heading: 34,
+          pitch: 10
+        }
+      });
+  map.setStreetView(panorama);
+}
+
 
 
          }
@@ -156,63 +195,52 @@
       var array = [];
       var id;
 
-
       setInterval(function(){
       $.ajax({
      type: "post",
      url: "connect.php",
      success: function(result){
-
         array = result.split("/");
 
         for(var x = 0; x < array.length-1; x++){
           coor = array[x].split(',');
-        marker = new google.maps.Marker({
-          map: map,
-          icon: markerIcon,
-          draggable: false,
-          title: coor[2],
-          label:{
-              text: ""+coor[3],
+          var label = {
+            text: ""+coor[3],
               color: "#eb3a44",
               fontSize: "16px",
               fontWeight: "bold"
-            },
-          position: {lat: parseFloat(coor[0]), lng: parseFloat(coor[1])}
-        });
+          }
+          markers[x].setLabel(label);                                                                                                                                                                                                                                                                                                                                                        
+        // marker = new google.maps.Marker({
+        //   map: map,
+        //   icon: markerIcon,
+        //   draggable: false,
+        //   title: coor[2],
+        //   label:{
+        //       text: ""+coor[3],
+        //       color: "#eb3a44",
+        //       fontSize: "16px",
+        //       fontWeight: "bold"
+        //     },
+        //   position: {lat: parseFloat(coor[0]), lng: parseFloat(coor[1])}
+        // });
 
-        marker.addListener('click', function(){
-            toggleData(this);
-        });
-
+        // marker.addListener('click', function(){
+        //     toggleData(this);
+        // });
       }
-
-
-
-
 
        
     }
 
   });
-
-      $.ajax({
-     type: "post",
-     url: "getData-d.php",
-     data: {data:id},
-     success: function(result){
-      console.log(id);
-        $('#js').html("");
-        $('#js').html(result);
-      }
-    });
-
-
       }, 1000);
+
 
 
       function toggleData(data) {
           id = data.getTitle();
+
           $('#data').hide();
 
     $.ajax({
@@ -227,10 +255,22 @@
        //responsive data
        $("#data").html(result);
         //
+        timer = setInterval(function(){
+                 $.ajax({
+           type: "post",
+           url: "getData-d.php",
+           data: {data:id},
+           success: function(result){
+            console.log(id);
+              $('#js').html("");
+              $('#js').html(result);
+            }
+          });
+        },2000);
 
         $('#loader').hide();
       
-      }, 1000);
+      }, 2000);
        
     }
 
@@ -239,8 +279,12 @@
           $('#dataDisplay').show("fade");
       }
 
+     
+
 
     });
+
+
 
       
 

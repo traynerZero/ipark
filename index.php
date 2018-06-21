@@ -56,7 +56,7 @@
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <aside class="main-sidebar sidebar-light-primary elevation-4">
     <!-- Brand Logo -->
     <a href="http://www.ipark.ph/" class="brand-link">
       <img src="dist/img/picture2.png" alt="iPark Logo"
@@ -69,16 +69,11 @@
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <h2>Parking Slots</h2>
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false" id="area_menu">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           
-      <li class="nav-item">
-        <a href="http://www.ipark.ph/" class="nav-link">Home</a>
-      </li>
-      <li class="nav-item">
-        <a href="http://www.ipark.ph/" class="nav-link">Contact</a>
-      </li>
            
         </ul>
       </nav>
@@ -109,7 +104,9 @@
 
 
 <aside class="main-sidebar-left sidebar-light-primary elevation-4" id="dataDisplay" style="display: none;">
-
+    <div id="pano" style="height: 50vh;">
+      
+    </div>
      <div id="data">
         
       </div>

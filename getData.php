@@ -1,17 +1,17 @@
 <?php
 
-$conn = mysqli_connect("localhost","root","",'iparkdb1');
+include "db.php";
 if($conn){
 
 }
 
 $id = $_POST['data'];
 
-$sql = "SELECT * FROM area where area_id = $id";
+$sql = "SELECT * FROM property where property_id = $id";
 $result = mysqli_query($conn,$sql);
 
 
-$slotsql = "SELECT * FROM slots where area_id = $id";
+$slotsql = "SELECT * FROM slotsdisplay where property_id = $id";
 $slots = mysqli_query($conn,$slotsql);
 
 if($result){
@@ -24,11 +24,11 @@ if($result){
 	//motor slot = motor_basesslot - motor_slot
 	//car slot = car_baseslot - car_slot
 
-	$baseslot = $slotrow["motor_baseslot"] + $slotrow["car_baseslot"];
+	$baseslot = $slotrow["motorBase_slot"] + $slotrow["carBase_slot"];
 	$occupied = $slotrow["motor_slot"] + $slotrow["car_slot"];
 	$remaining_slot = $baseslot - $occupied;
-	$motor_slot = $slotrow["motor_baseslot"] - $slotrow["motor_slot"];
-	$car_slot = $slotrow["car_baseslot"] - $slotrow["car_slot"];
+	$motor_slot = $slotrow["motorBase_slot"] - $slotrow["motor_slot"];
+	$car_slot = $slotrow["carBase_slot"] - $slotrow["car_slot"];
 		# code...
 			echo '<!-- Sidebar -->
 
@@ -39,21 +39,10 @@ if($result){
       });  
     });</script>
 
-        <div class="bg-pic">
-            <div class="dt-bck"><span class="fa fa-arrow-right"></span></div>
-            <img src="images/Picture3.png">
-        </div>
       <!-- Sidebar Menu -->
-        <h1 class="dt-title"><strong>'.$row['area_name'].'</strong></h1>
+        <h1 class="dt-title"><strong>'.$row['property_name'].'</strong></h1>
         <h3 style="text-align: center;"></h3>
         <div class="row">
-          <div class="col-lg-12 col-12">
-          <div class="small-box bg-danger">
-          <div class="inner">
-               <h3><i id="remaining_slot">'.$remaining_slot.'</i> &nbsp;&nbsp;&nbsp;&nbsp;<span class="fas fa-parking"></span> Slots Available</h3>
-          </div>
-          </div>
-          </div>
 
           <div class="col-lg-12 col-12">
             <!-- small box -->
