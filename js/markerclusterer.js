@@ -102,7 +102,7 @@ function MarkerClusterer(map, opt_markers, opt_options) {
    * @type {number}
    * @private
    */
-  this.gridSize_ = options['gridSize'] || 60;
+  this.gridSize_ = options['gridSize'] || 120;
 
   /**
    * @private
@@ -1083,9 +1083,9 @@ ClusterIcon.prototype.onAdd = function() {
   var isDragging = false;
   google.maps.event.addDomListener(this.div_, 'click', function(event) {
     // Only perform click when not preceded by a drag
-    if (!isDragging) {
+    
       that.triggerClusterClick(event);
-    }
+    
   });
   google.maps.event.addDomListener(this.div_, 'mousedown', function() {
     isDragging = false;

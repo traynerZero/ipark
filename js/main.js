@@ -123,7 +123,7 @@ function calculateAndDisplayRoute(my_location, destination_d) {
          mapTypeIds: ['mystyle', google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.TERRAIN]
        },
        center: new google.maps.LatLng(14.6218748, 121.05287369999996),
-       zoom: 17,
+       zoom: 15,
        mapTypeId: 'mystyle'
      });
 
@@ -194,24 +194,6 @@ function calculateAndDisplayRoute(my_location, destination_d) {
           clearInterval(timer);
       });
 
-
-
-        google.maps.event.addListener(map, 'zoom_changed', function(event) {
-          var bound = new google.maps.LatLngBounds();
-          if(map.getZoom() == 16){
-
-           
-
-
-
-      //   marker2.addListener('click', function(){
-      //       toggleData(this);
-      //   });
-
-      //       console.log( bound.getCenter().lat() );
-            }
-      });
-
         
         marker.addListener('click', function(){
             toggleData(this.getTitle(),this.getPosition().lat(),this.getPosition().lng());
@@ -220,7 +202,9 @@ function calculateAndDisplayRoute(my_location, destination_d) {
         }
 
          var options = {
-            imagePath: 'images/m'
+            imagePath: 'images/m',
+            zoomOnClick: true,
+            maxZoom: 21
 
         };
 
