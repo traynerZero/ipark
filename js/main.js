@@ -4,20 +4,76 @@
   var marker,marker2;
   var markers= []; //array of markers
   var markerIcon;
-  var timer;
+  var timer,pos;
  var array = [];
  var areaobj = [];
+ var directionsService,directionsDisplay;
 
   var map, infoWindow;
 
   // The map, centered at Uluru
+
+  function toggleThis(data,lat,lng) {
+
+          var id = data;
+          init_panorama(lat,lng);
+
+          $('#data').hide();
+    $.ajax({
+     type: 'post',
+     url: 'getData.php',
+     data: {data:id},
+     success: function(result){
+       $('#loader').show();
+      setTimeout(function(){
+       $('#data').show('fade');
+        $('#data').html(result);
+        $('#loader').hide();
+      }, 1000);
+       
+    }
+
+  });
+
+          $('#dataDisplay').show('fade');
+      }
+
+      function init_panorama(lat_d,lng_d) {
+
+  var loc = {lat: lat_d, lng: lng_d};
+  var panorama = new google.maps.StreetViewPanorama(
+      document.getElementById('pano'), {
+        position: loc,
+        pov: {
+          heading: 34,
+          pitch: 10
+        }
+      });
+  map.setStreetView(panorama);
+}
+
+function calculateAndDisplayRoute(my_location, destination_d) {
+        directionsService.route({
+          origin: my_location,
+          destination: destination_d,
+          travelMode: 'DRIVING'
+        }, function(response, status) {
+          if (status === 'OK') {
+            directionsDisplay.setDirections(response);
+          } else {
+            window.alert('Directions request failed due to ' + status);
+          }
+        });
+      }
+
+
       function initMap() {
 
         $.ajax({
      type: "post",
      url: "get-menu.php",
      success: function(result){
-
+      $('#area_menu').html(" ");
        $('#area_menu').html(result);
     }
 
@@ -29,7 +85,8 @@
       array = this.responseText.split("/");
       //store string json to array
         
-   
+      directionsService = new google.maps.DirectionsService;
+      directionsDisplay = new google.maps.DirectionsRenderer;
 
 
          var myStyle = [
@@ -70,9 +127,32 @@
        mapTypeId: 'mystyle'
      });
 
+      directionsDisplay.setMap(map);
+
      map.mapTypes.set('mystyle', new google.maps.StyledMapType(myStyle, { name: 'iPark' }));
 
         // Try HTML5 geolocation.
+        infoWindow = new google.maps.InfoWindow;
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            infoWindow.setPosition(pos);
+            infoWindow.setContent('<div class="info-window">You are here.</div>');
+            infoWindow.open(map);
+            map.setCenter(pos);
+          }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, infoWindow, map.getCenter());
+        }
+      
 
         for(var x = 0; x < array.length-1; x++){
           coor = array[x].split(',');
@@ -134,15 +214,21 @@
 
         
         marker.addListener('click', function(){
-            toggleData(this);
+            toggleData(this.getTitle(),this.getPosition().lat(),this.getPosition().lng());
         });
 
         }
-        function toggleData(data) {
 
-          var id = data.getTitle();
-          var lat = data.getPosition().lat();
-          var lng = data.getPosition().lng();
+         var options = {
+            imagePath: 'images/m'
+
+        };
+
+         var markerCluster = new MarkerClusterer(map, markers, options);
+
+        function toggleData(data,lat,lng) {
+
+          var id = data;
           init_panorama(lat,lng);
 
           $('#data').hide();
@@ -181,6 +267,8 @@
 
 
 
+
+
          }
   };
   xhttp.open("GET", "connect.php", true);
@@ -194,7 +282,42 @@
     $(document).ready(function(){
       var array = [];
       var id;
+      //search input
+      $('#search').on('keyup',function(){
+        
 
+        if(this.value != "" && this.value != null){
+          $.ajax({
+        
+           type: "post",
+           url: "search-menu.php",
+           data: {data:this.value},
+           success: function(result){
+
+              $('#area_menu').html(" ");
+              $('#area_menu').html(result);
+             
+              }
+              });
+
+          }else{
+
+               $.ajax({
+        
+           type: "post",
+           url: "get-menu.php",
+           success: function(result){
+
+            $('#area_menu').html(" ");
+              $('#area_menu').html(result);
+             
+              }
+              });
+
+          }
+
+      });
+      //end search input
       setInterval(function(){
       $.ajax({
      type: "post",
@@ -210,24 +333,7 @@
               fontSize: "16px",
               fontWeight: "bold"
           }
-          markers[x].setLabel(label);                                                                                                                                                                                                                                                                                                                                                        
-        // marker = new google.maps.Marker({
-        //   map: map,
-        //   icon: markerIcon,
-        //   draggable: false,
-        //   title: coor[2],
-        //   label:{
-        //       text: ""+coor[3],
-        //       color: "#eb3a44",
-        //       fontSize: "16px",
-        //       fontWeight: "bold"
-        //     },
-        //   position: {lat: parseFloat(coor[0]), lng: parseFloat(coor[1])}
-        // });
-
-        // marker.addListener('click', function(){
-        //     toggleData(this);
-        // });
+          markers[x].setLabel(label);                                                                                                                                                     
       }
 
        
@@ -283,7 +389,6 @@
 
 
     });
-
 
 
       

@@ -17,7 +17,8 @@ $slots = mysqli_query($conn,$slotsql);
 if($result){
 	$row = mysqli_fetch_assoc($result);
 	$slotrow = mysqli_fetch_assoc($slots); // slots result
-
+  $coor = array();
+  $coor = explode(",", $row['property_coord']); 
 	//baseslot = motor_baseslot + car_baseslot
 	//occupied slot = motor_slot + car_slot
 	//remaining slot = base slot - occupied slot
@@ -40,7 +41,20 @@ if($result){
     });</script>
 
       <!-- Sidebar Menu -->
-        <h1 class="dt-title"><strong>'.$row['property_name'].'</strong></h1>
+        <h1 class="dt-title"><strong>'.$row['property_name'].'</strong><br>
+        <div style="padding:10px;">
+        <script>
+
+         var destination = {
+              lat: '.$coor[0].',
+              lng: '.$coor[1].'
+            };
+
+        </script>
+        <button class="btn btn-primary" title="Direction" onclick="calculateAndDisplayRoute(pos,destination);"><span><i class="fa fa-compass"></i></span></button>
+        <button class="btn btn-danger" title="Rates"><span><i class="fa fa-list-ul"></i></span></button>
+        <div>
+        </h1> 
         <h3 style="text-align: center;"></h3>
         <div class="row">
 
@@ -69,7 +83,7 @@ if($result){
               </div>
             </div>
           </div>
-          <!-- ./col -->
+
         </div>
       <!-- /.sidebar-menu -->
     <!-- /.sidebar -->

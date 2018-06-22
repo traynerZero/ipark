@@ -40,15 +40,16 @@
 <!-- PAGE SCRIPTS -->
 <script src="dist/js/pages/dashboard2.js"></script>
 
+    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/markerclusterer.js"></script>
 
 </head>
 <body class="hold-transition sidebar-mini">
-<div class="wrapper">
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand bg-white navbar-light border-bottom">
+  <nav class="main-header navbar navbar-expand bg-white navbar-light border-bottom" style="width: 12%;">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
-      <li class="nav-item">
+      <li id="navbar-show" class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#"><i class="fa fa-bars"></i></a>
       </li>
     </ul>
@@ -69,8 +70,20 @@
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
-        <h2>Parking Slots</h2>
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false" id="area_menu">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+        
+      <form class="form-inline ml-3">
+      <div class="input-group wrap-input100 rs1-wrap-input100">
+        <div class="row">
+        <input class="input100" type="search" placeholder="Search" aria-label="Search" id="search" autocomplete="off">
+        <span class="focus-input100"></span>
+        </div>
+      </div>
+    </form>
+          <div id="area_menu">
+            
+          </div>
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           
@@ -87,11 +100,10 @@
     <!-- /.content-header -->
 
     <!-- Main content -->
-    <script type="text/javascript" src="js/main.js"></script>
     <section class="content">
       <div id="map"></div>
     
-     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTgczb7Vc891EnJeEgFyPBg3XCu-Pf2Vk&callback=initMap"
+     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTgczb7Vc891EnJeEgFyPBg3XCu-Pf2Vk&callback=initMap"
   type="text/javascript"></script>
       <section>
     <!-- /.content -->
