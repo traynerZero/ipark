@@ -105,7 +105,7 @@
     <section class="content">
       <div id="map"></div>
     
-     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTgczb7Vc891EnJeEgFyPBg3XCu-Pf2Vk&callback=initMap"
+     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTgczb7Vc891EnJeEgFyPBg3XCu-Pf2Vk&callback=initMap"
   type="text/javascript"></script>
       <section>
     <!-- /.content -->

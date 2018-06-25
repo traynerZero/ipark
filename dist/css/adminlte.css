@@ -12893,6 +12893,7 @@ a.text-muted:hover {
 /*my css*/
 
 .main-sidebar-left{
+  height: auto;
   position: fixed;
   top: 0;
   right: 0;
@@ -12902,7 +12903,7 @@ a.text-muted:hover {
 
 .main-sidebar-left,.main-sidebar-left:before{
 transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
-  width: 450px;
+  width: 25%;
 
 }
 
@@ -12986,5 +12987,51 @@ transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+
+@media (max-width: 1190px) {
+  .main-sidebar-left {
+      width: 35%;
+  }
+  .small-box h3{
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 780px) {
+  .main-sidebar-left {
+      width: 35%;
+  }
+  .dt-title {
+    font-size: 1.5rem;
+  }
+  .small-box h3{
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 546px) {
+  .main-sidebar-left {
+      width: 40%;
+  }
+  .dt-title {
+    font-size: 1.5rem;
+  }
+  .small-box h3{
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 284px) {
+  .main-sidebar-left {
+      width: 50%;
+  }
+  .dt-title {
+    font-size: 1.0rem;
+  }
+  .small-box h3{
+    font-size: 12px;
   }
 }

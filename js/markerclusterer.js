@@ -63,7 +63,7 @@
  * @constructor
  * @extends google.maps.OverlayView
  */
-function MarkerClusterer(map, opt_markers, opt_options) {
+function MarkerClusterer(map, opt_markers, opt_options,area) {
   // MarkerClusterer implements google.maps.OverlayView interface. We use the
   // extend function to extend MarkerClusterer with google.maps.OverlayView
   // because it might not always be available when the code is defined so we
@@ -72,6 +72,8 @@ function MarkerClusterer(map, opt_markers, opt_options) {
   this.extend(MarkerClusterer, google.maps.OverlayView);
   this.map_ = map;
 
+
+  this.area = area;
   /**
    * @type {Array.<google.maps.Marker>}
    * @private
@@ -83,7 +85,8 @@ function MarkerClusterer(map, opt_markers, opt_options) {
    */
   this.clusters_ = [];
 
-  this.sizes = [53, 56, 66, 78, 90];
+  this.sizes = [121, 131, 141, 151, 161];
+  this.ysizes = [67,73,78,84,89];
 
   /**
    * @private
@@ -247,7 +250,7 @@ MarkerClusterer.prototype.setupStyles_ = function() {
   for (var i = 0, size; size = this.sizes[i]; i++) {
     this.styles_.push({
       url: this.imagePath_ + (i + 1) + '.' + this.imageExtension_,
-      height: size,
+      height: this.ysizes[i],
       width: size
     });
   }
@@ -748,7 +751,7 @@ MarkerClusterer.prototype.distanceBetweenPoints_ = function(p1, p2) {
  * @param {google.maps.Marker} marker The marker to add.
  * @private
  */
-MarkerClusterer.prototype.addToClosestCluster_ = function(marker) {
+MarkerClusterer.prototype.addToClosestCluster_ = function(marker,area) {
   var distance = 40000; // Some large number
   var clusterToAddTo = null;
   var pos = marker.getPosition();
@@ -766,7 +769,7 @@ MarkerClusterer.prototype.addToClosestCluster_ = function(marker) {
   if (clusterToAddTo && clusterToAddTo.isMarkerInClusterBounds(marker)) {
     clusterToAddTo.addMarker(marker);
   } else {
-    var cluster = new Cluster(this);
+    var cluster = new Cluster(this,area);
     cluster.addMarker(marker);
     this.clusters_.push(cluster);
   }
@@ -791,7 +794,7 @@ MarkerClusterer.prototype.createClusters_ = function() {
 
   for (var i = 0, marker; marker = this.markers_[i]; i++) {
     if (!marker.isAdded && this.isMarkerInBounds_(marker, bounds)) {
-      this.addToClosestCluster_(marker);
+      this.addToClosestCluster_(marker,this.area);
     }
   }
 };
@@ -805,7 +808,8 @@ MarkerClusterer.prototype.createClusters_ = function() {
  * @constructor
  * @ignore
  */
-function Cluster(markerClusterer) {
+function Cluster(markerClusterer,area) {
+  this.area = area;
   this.markerClusterer_ = markerClusterer;
   this.map_ = markerClusterer.getMap();
   this.gridSize_ = markerClusterer.getGridSize();
@@ -1033,6 +1037,7 @@ Cluster.prototype.updateIcon = function() {
 function ClusterIcon(cluster, styles, opt_padding) {
   cluster.getMarkerClusterer().extend(ClusterIcon, google.maps.OverlayView);
 
+  this.area = cluster.area;
   this.styles_ = styles;
   this.padding_ = opt_padding || 0;
   this.cluster_ = cluster;
@@ -1073,7 +1078,7 @@ ClusterIcon.prototype.onAdd = function() {
   if (this.visible_) {
     var pos = this.getPosFromLatLng_(this.center_);
     this.div_.style.cssText = this.createCss(pos);
-    this.div_.innerHTML = this.sums_.text;
+    this.div_.innerHTML = this.area+""+this.sums_.text;
   }
 
   var panes = this.getPanes();
@@ -1263,8 +1268,8 @@ ClusterIcon.prototype.createCss = function(pos) {
   var txtSize = this.textSize_ ? this.textSize_ : 11;
 
   style.push('cursor:pointer; top:' + pos.y + 'px; left:' +
-      pos.x + 'px; color:' + txtColor + '; position:absolute; font-size:' +
-      txtSize + 'px; font-family:Arial,sans-serif; font-weight:bold');
+      pos.x + 'px; color:' + '#0a4b72;' + '; position:absolute; font-size:' +
+      12 + 'px; font-family:Verdana, Geneva, sans-serif; font-weight:bold');
   return style.join('');
 };
 

@@ -2,9 +2,13 @@
 
   var coor = [];
   var marker,marker2;
-  var markers= []; //array of markers
+  var markers= [];//array of markers
+  var cluster_markers= [];
+  var area_array = [];
+  var area_id_array = []; 
   var markerIcon;
   var timer,pos;
+  var imageUrl = 'images/icon_transp.png';
  var array = [];
  var areaobj = [];
  var directionsService,directionsDisplay;
@@ -182,20 +186,23 @@ function calculateAndDisplayRoute(my_location, destination_d) {
       
 
         for(var x = 0; x < array.length-1; x++){
+
           coor = array[x].split(',');
           areaobj[x] = JSON.parse(JSON.stringify({
                   lat:coor[0],
                   lng:coor[1],
                   id:coor[2],
                   slot:coor[3],
+                  area_id:coor[4],
+                  area_name:coor[5],
               }));
 
           markerIcon = {
-            url: 'http://image.flaticon.com/icons/svg/252/252025.svg',
-            scaledSize: new google.maps.Size(80, 80),
-            origin: new google.maps.Point(0, 0),
-            anchor: new google.maps.Point(32,65),
-            labelOrigin: new google.maps.Point(40,33)
+            url: imageUrl,
+            scaledSize: new google.maps.Size(200, 200),
+            origin: new google.maps.Point(-35,0),
+            anchor: new google.maps.Point(103,125),
+            labelOrigin: new google.maps.Point(130,67)
           };
 
         var markerLabel = ""+coor[3]; 
@@ -206,7 +213,7 @@ function calculateAndDisplayRoute(my_location, destination_d) {
           title: coor[2],
           label:{
               text: markerLabel,
-              color: "#eb3a44",
+              color: "#0a4b72",
               fontSize: "16px",
               fontWeight: "bold"
             },
@@ -215,6 +222,9 @@ function calculateAndDisplayRoute(my_location, destination_d) {
         });
 
         markers.push(marker);
+        area_array.push(coor[4]);
+        area_id_array.push(coor[5]);
+        
 
         google.maps.event.addListener(map, 'click', function(event) {
           $('#dataDisplay').hide("fade");
@@ -223,19 +233,31 @@ function calculateAndDisplayRoute(my_location, destination_d) {
 
         
         marker.addListener('click', function(){
+            map.setZoom(21);
+           map.setCenter(new google.maps.LatLng(this.getPosition().lat(),this.getPosition().lng()));
             toggleData(this.getTitle(),this.getPosition().lat(),this.getPosition().lng());
         });
 
         }
 
-         var options = {
+        for(var y=0; y < area_array.length; y++){
+          cluster_markers = [];
+        for(var x = 0; x < markers.length; x++){
+          if(area_array[y] == areaobj[x].area_id){
+            cluster_markers.push(markers[x]);
+         }
+        }
+
+        var options = {
             imagePath: 'images/m',
             zoomOnClick: true,
             maxZoom: 21
-
         };
 
-         var markerCluster = new MarkerClusterer(map, markers, options);
+         var markerCluster = new MarkerClusterer(map, cluster_markers, options,area_id_array[y]);
+
+      }
+        
 
         function toggleData(data,lat,lng) {
 
@@ -284,10 +306,6 @@ function calculateAndDisplayRoute(my_location, destination_d) {
   };
   xhttp.open("GET", "connect.php", true);
   xhttp.send();
-     
-      
-
-
     }
 
     $(document).ready(function(){
@@ -340,10 +358,31 @@ function calculateAndDisplayRoute(my_location, destination_d) {
           coor = array[x].split(',');
           var label = {
             text: ""+coor[3],
-              color: "#eb3a44",
+              color: "#0a4b72",
               fontSize: "16px",
               fontWeight: "bold"
           }
+
+         
+
+          if(coor[3] <= 20){
+            imageUrl = 'images/icon_red.png';
+
+            markers[x].setIcon(updateMarker(imageUrl));
+          }
+          else if(coor[3] > 20 && coor[3]<100){
+            imageUrl = 'images/icon_orange.png';
+
+            markers[x].setIcon(updateMarker(imageUrl));
+          }
+          else if(coor[3] >= 100){
+            imageUrl = 'images/icon_green.png';
+
+            
+
+            markers[x].setIcon(updateMarker(imageUrl));
+          }
+
           markers[x].setLabel(label);                                                                                                                                                     
       }
 
@@ -353,7 +392,17 @@ function calculateAndDisplayRoute(my_location, destination_d) {
   });
       }, 1000);
 
+      function updateMarker(imageUrl_d){
+        var markerIcon_d = {
+            url: imageUrl_d,
+            scaledSize: new google.maps.Size(200, 200),
+            origin: new google.maps.Point(-35,0),
+            anchor: new google.maps.Point(103,125),
+            labelOrigin: new google.maps.Point(130,67)
+          };
 
+          return markerIcon_d;
+      }
 
       function toggleData(data) {
           id = data.getTitle();

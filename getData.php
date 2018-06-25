@@ -56,7 +56,7 @@ if($result){
         <div>
         </h1> 
         <h3 style="text-align: center;"></h3>
-        <div class="row">
+        <div class="row" style="margin-bottom:10%;">
 
           <div class="col-lg-12 col-12">
             <!-- small box -->
