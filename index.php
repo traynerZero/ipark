@@ -8,6 +8,7 @@
   <title>iPark</title>
 
   <!-- Font Awesome Icons -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
   <link rel="stylesheet" type="text/css" href="css/main.css">
 
   <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
@@ -24,7 +25,7 @@
 <!-- Bootstrap -->
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
-<script src="dist/js/adminlte.js"></script>
+<script src="dist/js/adminlte.min.js"></script>
 
 <!-- OPTIONAL SCRIPTS -->
 <script src="dist/js/demo.js"></script>
@@ -45,6 +46,7 @@
 
 </head>
 <body class="hold-transition sidebar-mini">
+  <div class="wrapper">
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand bg-white navbar-light border-bottom" style="width: 12%;">
     <!-- Left navbar links -->
@@ -126,6 +128,10 @@
         
       </div>
       <div id="loader" class="lds-dual-ring" style="display: none;"></div>
-
+    </aside>
+    <footer style="background-color: white; height: auto; width: 100%;">
+      
+    </footer>
+    </div>
 </body>
 </html>

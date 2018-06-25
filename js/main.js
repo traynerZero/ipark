@@ -52,7 +52,28 @@
   map.setStreetView(panorama);
 }
 
+function createMarker(latlng, title) {
+
+    var marker = new google.maps.Marker({
+        position: latlng,
+        icon: markerIcon,
+        title: title,
+        map: map
+    });
+
+    google.maps.event.addListener(marker, 'click', function () {
+        infowindow.setContent(title);
+        infowindow.open(map, marker);
+    });
+}
+
+
 function calculateAndDisplayRoute(my_location, destination_d) {
+
+        createMarker(my_location,'start');
+        createMarker(destination_d,'end');
+
+
         directionsService.route({
           origin: my_location,
           destination: destination_d,
@@ -118,10 +139,15 @@ function calculateAndDisplayRoute(my_location, destination_d) {
        }
      ];
 
+     directionsDisplay = new google.maps.DirectionsRenderer({
+                suppressMarkers: true
+            });
+
       map = new google.maps.Map(document.getElementById('map'), {
        mapTypeControlOptions: {
-         mapTypeIds: ['mystyle', google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.TERRAIN]
+         mapTypeIds: ['mystyle', google.maps.MapTypeId.HYBRID, google.maps.MapTypeId.TERRAIN]
        },
+        rotateControl: true,
        center: new google.maps.LatLng(14.6218748, 121.05287369999996),
        zoom: 15,
        mapTypeId: 'mystyle'
@@ -130,6 +156,7 @@ function calculateAndDisplayRoute(my_location, destination_d) {
       directionsDisplay.setMap(map);
 
      map.mapTypes.set('mystyle', new google.maps.StyledMapType(myStyle, { name: 'iPark' }));
+     map.mapTypes.set(google.maps.MapTypeId.HYBRID, new google.maps.StyledMapType(google.maps.MapTypeId.HYBRID, { name: 'Satellite' }));
 
         // Try HTML5 geolocation.
         infoWindow = new google.maps.InfoWindow;

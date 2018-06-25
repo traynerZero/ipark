@@ -1,7 +1,7 @@
 
        /* Set the size of the div element that contains the map */
       #map {
-        height: 100vh;  /* The height is 400 pixels */
+        height: 90vh;  /* The height is 400 pixels */
         width: auto;  /* The width is the width of the web page */
        }
 
