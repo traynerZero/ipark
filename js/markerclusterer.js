@@ -1062,19 +1062,6 @@ ClusterIcon.prototype.triggerClusterClick = function(event) {
   // Trigger the clusterclick event.
   google.maps.event.trigger(markerClusterer, 'clusterclick', this.cluster_, event);
   
-  var area_d = this.area;
-  // Get area information
-  $.ajax({
-     type: "post",
-     url: "get-Area-info.php",
-     data: {area:area_d},
-     success: function(result){
-      $('#area-info').html('');
-      $('#area-info').html(result);
-       $('#area-info').show('blind');
-    }
-
-  });
   //
   if (markerClusterer.isZoomOnClick()) {
     // Zoom into the cluster.

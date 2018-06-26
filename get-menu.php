@@ -17,11 +17,21 @@ if($result){
         <a href="#" class="nav-link"><i class="fa fa-list-ul"></i> &nbsp;<p>'.$row['area_name'].'<i class="right fa fa-angle-left"></i></p></a>
         <ul class="nav nav-treeview">';
         	while($prop_row = mysqli_fetch_assoc($prop_result)){
+
+            $slotsql = "SELECT * FROM slotsdisplay where property_id = ".$prop_row["property_id"]."";
+        $slots = mysqli_query($conn,$slotsql);
+        $slotrow = mysqli_fetch_assoc($slots);
+
+          $baseslot = $slotrow["motorBase_slot"] + $slotrow["carBase_slot"];
+          $occupied = $slotrow["motor_slot"] + $slotrow["car_slot"];
+          $remaining_slot = $baseslot - $occupied;
+          $bg = '';
+
         	$coor = array();
         	$coor = explode(",", $prop_row['property_coord']); 
         	$echo .='<li id="'.$prop_row['property_id'].'" class="nav-item">
                 <a href="#" class="nav-link">
-                  <i class="fa fa-circle-o nav-icon"></i>
+                  <span class="float-right badge" id="prop'.$prop_row['property_id'].'">'.$remaining_slot.'</span>
                   <p>'.$prop_row['property_name'].'</p>
                 </a>
               </li>

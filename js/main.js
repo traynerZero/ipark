@@ -391,24 +391,25 @@ function calculateAndDisplayRoute(my_location, destination_d) {
               fontSize: "16px",
               fontWeight: "bold"
           }
-
-         
+          $('#prop'+markers[x].getTitle()).html('');
+         $('#prop'+markers[x].getTitle()).html(coor[3]);
 
           if(coor[3] <= 20){
             imageUrl = 'images/icon_red.png';
 
+            $('#prop'+markers[x].getTitle()).prop('style','background-color:#dc3545; color: white;');
             markers[x].setIcon(updateMarker(imageUrl));
           }
           else if(coor[3] > 20 && coor[3]<100){
             imageUrl = 'images/icon_orange.png';
-
+            $('#prop'+markers[x].getTitle()).prop('style','background-color:#ffc107; color: black;');
             markers[x].setIcon(updateMarker(imageUrl));
           }
           else if(coor[3] >= 100){
             imageUrl = 'images/icon_green.png';
 
             
-
+            $('#prop'+markers[x].getTitle()).prop('style','background-color:#28a745;color: white;');
             markers[x].setIcon(updateMarker(imageUrl));
           }
 
