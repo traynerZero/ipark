@@ -172,9 +172,23 @@ function calculateAndDisplayRoute(my_location, destination_d) {
               lng: position.coords.longitude
             };
 
-            infoWindow.setPosition(pos);
-            infoWindow.setContent('<div class="info-window">You are here.</div>');
-            infoWindow.open(map);
+           var markerIcon2 = {
+            url: 'images/pin.png',
+            scaledSize: new google.maps.Size(80, 80),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(32,65),
+            labelOrigin: new google.maps.Point(40,33)
+          };
+ 
+        marker = new google.maps.Marker({
+          map: map,
+          icon: markerIcon2,
+          draggable: false,
+          title: 'You are here',
+          animation: google.maps.Animation.DROP,
+          position: pos
+        });
+
             map.setCenter(pos);
           }, function() {
             handleLocationError(true, infoWindow, map.getCenter());
@@ -274,6 +288,21 @@ function calculateAndDisplayRoute(my_location, destination_d) {
       setTimeout(function(){
        $('#data').show("fade");
         $('#data').html(result);
+
+        timer = setInterval(function(){
+                 $.ajax({
+           type: "post",
+           url: "getData-d.php",
+           data: {data:id},
+           success: function(result){
+            console.log(id);
+              $('#js').html("");
+              $('#js').html(result);
+            }
+          });
+        },2000);
+
+
         $('#loader').hide();
       }, 1000);
        
@@ -404,53 +433,13 @@ function calculateAndDisplayRoute(my_location, destination_d) {
           return markerIcon_d;
       }
 
-      function toggleData(data) {
-          id = data.getTitle();
-
-          $('#data').hide();
-
-    $.ajax({
-     type: "post",
-     url: "getData.php",
-     data: {data:id},
-     success: function(result){
-       $('#loader').show();
-      setTimeout(function(){
-       $('#data').show("fade");
-
-       //responsive data
-       $("#data").html(result);
-        //
-        timer = setInterval(function(){
-                 $.ajax({
-           type: "post",
-           url: "getData-d.php",
-           data: {data:id},
-           success: function(result){
-            console.log(id);
-              $('#js').html("");
-              $('#js').html(result);
-            }
-          });
-        },2000);
-
-        $('#loader').hide();
-      
-      }, 2000);
-       
-    }
-
-  });
-
-          $('#dataDisplay').show("fade");
-      }
 
      
 
 
     });
 
-
+    //Make the DIV element draggagle:
       
 
       function handleLocationError(browserHasGeolocation, infoWindow, pos) {

@@ -1061,7 +1061,21 @@ ClusterIcon.prototype.triggerClusterClick = function(event) {
 
   // Trigger the clusterclick event.
   google.maps.event.trigger(markerClusterer, 'clusterclick', this.cluster_, event);
+  
+  var area_d = this.area;
+  // Get area information
+  $.ajax({
+     type: "post",
+     url: "get-Area-info.php",
+     data: {area:area_d},
+     success: function(result){
+      $('#area-info').html('');
+      $('#area-info').html(result);
+       $('#area-info').show('blind');
+    }
 
+  });
+  //
   if (markerClusterer.isZoomOnClick()) {
     // Zoom into the cluster.
     this.map_.fitBounds(this.cluster_.getBounds());
@@ -1078,7 +1092,7 @@ ClusterIcon.prototype.onAdd = function() {
   if (this.visible_) {
     var pos = this.getPosFromLatLng_(this.center_);
     this.div_.style.cssText = this.createCss(pos);
-    this.div_.innerHTML = this.area+""+this.sums_.text;
+    this.div_.innerHTML = this.area;
   }
 
   var panes = this.getPanes();

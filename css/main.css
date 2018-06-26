@@ -92,3 +92,13 @@ input.input100 {
   overflow-x: hidden;
   overflow-y: hidden; 
 }
+
+.area-information{
+  position: fixed;
+  bottom: 0;
+  width: 20%;
+  margin-left: 16%;
+  margin-bottom: 4%;
+  background-color: transparent;
+}
+

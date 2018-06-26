@@ -98,6 +98,8 @@
   </aside>
 
   <!-- Content Wrapper. Contains page content -->
+
+ 
   <div class="content-wrapper">
     <!-- /.content-header -->
 
@@ -115,6 +117,10 @@
   <!-- /.control-sidebar -->
 <!-- ./wrapper -->
 <!-- Modal -->
+<div>
+ <div class="area-information" id="area-info">
+   
+ </div>
 
 
 <aside class="main-sidebar-left sidebar-light-primary elevation-4" id="dataDisplay" style="display: none;">
